@@ -72,4 +72,11 @@ CI runs via GitHub Actions (`.github/workflows/ci.yml`) on every push and PR to 
 - python - installs dependencies from `requirements.txt` / `requirements-dev.txt` if present, runs `pytest`
 - java - builds and tests with Maven (mvn -B verify)
 
-> **NOTE:**Hosted GitHub runners are used, so no local runner registration is needed.
+> **NOTE:** Hosted GitHub runners are used, so no local runner registration is needed.
+
+## Argo CD
+
+Install Argo into Docker Destop Cluster:
+`kubectl create namespace argocd && kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`
+
+Verify in docker desktop under Kubernetes namespace dropdown `argocd`
