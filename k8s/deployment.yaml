@@ -4,7 +4,7 @@ metadata:
   name: hello-argocd
   namespace: job-scheduler
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: hello-argocd
