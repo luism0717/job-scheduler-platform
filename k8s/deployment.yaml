@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-argocd
+  namespace: job-scheduler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-argocd
+  template:
+    metadata:
+      labels:
+        app: hello-argocd
+    spec:
+      containers:
+        - name: hello-argocd
+          image: nginx:1.25
+          ports:
+            - containerPort: 80
