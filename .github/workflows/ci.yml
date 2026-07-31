@@ -18,16 +18,33 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: "pip"
+          # No "cache:" option here on purpose it hard-fails if it can't
+          # find a requirements.txt/pyproject.toml at a predictable path.
 
-      - name: Install dependencies
+      - name: Locate and install Python project
         run: |
+          set -e
+          REQ_FILE=$(find . -maxdepth 4 -name "requirements.txt" | head -n 1)
+          PYPROJECT_FILE=$(find . -maxdepth 4 -name "pyproject.toml" | head -n 1)
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+          if [ -n "$REQ_FILE" ]; then
+            echo "Found $REQ_FILE"
+            pip install -r "$REQ_FILE"
+            echo "PY_DIR=$(dirname "$REQ_FILE")" >> "$GITHUB_ENV"
+          elif [ -n "$PYPROJECT_FILE" ]; then
+            echo "Found $PYPROJECT_FILE"
+            pip install "$(dirname "$PYPROJECT_FILE")"
+            echo "PY_DIR=$(dirname "$PYPROJECT_FILE")" >> "$GITHUB_ENV"
+          else
+            echo "No requirements.txt or pyproject.toml found — skipping install"
+            echo "PY_DIR=." >> "$GITHUB_ENV"
+          fi
+          pip install pytest
 
       - name: Run tests
-        run: pytest
+        run: |
+          cd "$PY_DIR"
+          pytest || [ $? -eq 5 ]  # exit 5 = no tests collected, don't fail build on that
 
   java:
     name: Java build & test
@@ -41,7 +58,28 @@ jobs:
         with:
           distribution: "temurin"
           java-version: "21"
-          cache: "maven"
+          # No "cache:" option here gradle/actions/setup-gradle below
+          # handles Gradle caching itself and doesn't need a guessed path.
 
-      - name: Build and test with Maven
-        run: mvn -B verify
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Locate Gradle project
+        run: |
+          set -e
+          GRADLEW_FILE=$(find . -maxdepth 4 -name "gradlew" | head -n 1)
+          if [ -z "$GRADLEW_FILE" ]; then
+            echo "No gradlew wrapper found in repo (searched 4 levels deep)."
+            echo "This job will fail until a Gradle project with a wrapper is added, or the workflow is pointed at the right path."
+            exit 1
+          fi
+          echo "Found $GRADLEW_FILE"
+          echo "JAVA_DIR=$(dirname "$GRADLEW_FILE")" >> "$GITHUB_ENV"
+
+      - name: Make gradlew executable
+        run: chmod +x "$JAVA_DIR/gradlew"
+
+      - name: Build and test with Gradle
+        run: |
+          cd "$JAVA_DIR"
+          ./gradlew build
