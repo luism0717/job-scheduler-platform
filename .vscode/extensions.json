@@ -1,0 +1,22 @@
+{
+  "recommendations": [
+    "ms-azuretools.vscode-containers",
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "redhat.vscode-yaml",
+    "Tim-Koehler.helm-intellisense",
+    "vscjava.vscode-java-pack",
+    "Angular.ng-template",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "charliermarsh.ruff",
+    "ms-ossdata.vscode-pgsql",
+    "GitHub.vscode-pull-request-github",
+    "GitHub.vscode-github-actions",
+    "humao.rest-client",
+    "tamasfe.even-better-toml",
+    "usernamehw.errorlens",
+    "eamodio.gitlens"
+  ]
+}

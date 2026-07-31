@@ -1,0 +1,19 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Java
+target/
+
+# Node / Angular
+node_modules/
+dist/
+
+# Env / secrets
+.env
+*.local
+
+# Misc
+*.log
+dir.txt

@@ -1,0 +1,59 @@
+{
+  // --- Formatting enforced repo-wide ---
+  "editor.formatOnSave": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.eol": "\n",
+
+  // --- Java (adjust path per-machine via extensions.json prompt, or leave to user settings) ---
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.saveActions.organizeImports": true,
+
+  // --- Python ---
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.testing.pytestEnabled": true,
+  "python.envFile": "${workspaceFolder}/.env",
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+
+  // --- Angular / TS ---
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+
+  // --- YAML (K8s manifests, Argo CD apps, GitHub Actions) ---
+  "[yaml]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "yaml.schemas": {
+    "kubernetes": ["k8s/**/*.yaml", "kind/**/*.yaml"]
+  },
+
+  // --- Exclude noise from search/explorer ---
+  "files.exclude": {
+    "**/.git": true,
+    "**/node_modules": true,
+    "**/.venv": true,
+    "**/target": true,
+    "**/dist": true,
+    "**/__pycache__": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.venv": true,
+    "**/target": true,
+    "**/dist": true
+  }
+}
